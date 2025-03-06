@@ -149,6 +149,14 @@ const Navbar = () => {
           >
             CONTACT
           </NavLink>
+          <a
+            onClick={() => setVisible(false)}
+            href="https://e-commerce-mern-admin-qtw0.onrender.com/add"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2 pl-6 border">
+            ADMIN LOGIN
+          </a>
         </div>
       </div>
     </div>

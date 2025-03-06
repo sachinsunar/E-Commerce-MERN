@@ -1,11 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets.js";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext.jsx";
 
 const Navbar = () => {
+  const [isHomePage, setIsHomePage] = useState(false);
   const [visible, setVisible] = useState(false);
   const { showSearch, setShowSearch, getCartCount, token, setToken, setCartItem, navigate } = useContext(ShopContext);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.includes('/collection')) {
+      setIsHomePage(false);
+    }
+    else {
+      setIsHomePage(true);
+    }
+
+  }, [location])
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -50,17 +63,20 @@ const Navbar = () => {
 
       <div className="flex items-center gap-6">
 
-        <img onClick={() => setShowSearch(!showSearch)} src={assets.search_icon} alt="" className="w-5 cursor-pointer" />
+        {
+          isHomePage ? null : <img onClick={() => setShowSearch(!showSearch)} src={assets.search_icon} alt="" className="w-5 cursor-pointer" />
+        }
 
         <div className="group relative">
 
-
-          <img
-            onClick={() => token ? null : navigate('/login')}
+          {token ? <img
+            // onClick={() => token ? null : navigate('/login')}
             src={assets.profile_icon}
             alt=""
             className="w-5 cursor-pointer"
-          />
+          /> :
+            <p onClick={() => navigate('/login')} className=" cursor-pointer border-2 border-gray-300 text-black font-semibold py-1 px-4 rounded-lg hover:bg-black hover:text-white transition duration-300">Login</p>}
+
 
 
           {/* -----------drop down------------ */}

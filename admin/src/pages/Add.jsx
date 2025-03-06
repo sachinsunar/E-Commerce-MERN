@@ -17,10 +17,12 @@ const Add = ({ token }) => {
   const [subCategory, setSubCategory] = useState("Topwear");
   const [bestseller, setBestseller] = useState(false);
   const [sizes, setSizes] = useState([]);
+  const [loading, setLoading] = useState(false); // New state for loader
 
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     try {
 
       const formData = new FormData()
@@ -65,6 +67,9 @@ const Add = ({ token }) => {
       } else {
         toast.error("Network error, please try again!");
       }
+    }
+    finally {
+      setLoading(false); // Stop loading after request completes
     }
   }
 
@@ -183,7 +188,21 @@ const Add = ({ token }) => {
         <label className='cursor-pointer' htmlFor="bestseller">Add to bestseller</label>
       </div>
 
-      <button type='submit' className='w-28 py-2 mt-4 bg-black text-white cursor-pointer'>Add</button>
+
+
+      <button type='submit' disabled={loading} className={`w-28 py-2 mt-4 text-white cursor-pointer  ${loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-black'}`}>
+        {loading ? (
+          <span className="flex items-center justify-center">
+            <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Adding...
+          </span>
+        ) : (
+          "Add"
+        )}
+      </button>
 
 
     </form>

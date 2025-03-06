@@ -7,6 +7,7 @@ import assets from '../assets/assets'
 const List = ({ token }) => {
 
   const [list, setList] = useState([])
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchList = async () => {
     try {
@@ -26,6 +27,7 @@ const List = ({ token }) => {
 
 
   const removeProduct = async (id) => {
+    setDeletingId(id);
     try {
       const res = await axios.delete(`${backendUrl}/api/product/remove/${id}`, { headers: { token } });
       if (res.data.success) {
@@ -37,6 +39,8 @@ const List = ({ token }) => {
     } catch (error) {
       console.log(error)
       toast.error(error.message)
+    } finally {
+      setDeletingId(null); // Reset loading state
     }
   }
 
@@ -73,12 +77,18 @@ const List = ({ token }) => {
               <p>{item.category}</p>
               <p>Rs.{item.price}</p>
               <div className='flex justify-center items-center'>
-                <img
-                  onClick={() => removeProduct(item._id)}
-                  className='w-6 h-6 cursor-pointer hover:opacity-80 transition'
-                  src={assets.delete_icon}
-                  alt="Delete"
-                />
+                {deletingId === item._id ? (
+                  <button className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full">
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-gray-500"></div>
+                  </button>
+                ) : (
+                  <img
+                    onClick={() => removeProduct(item._id)}
+                    className='w-6 h-6 cursor-pointer hover:opacity-80 transition'
+                    src={assets.delete_icon}
+                    alt="Delete"
+                  />
+                )}
               </div>
             </div>
           ))

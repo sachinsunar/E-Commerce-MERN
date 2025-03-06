@@ -37,12 +37,23 @@ const Navbar = () => {
           <p>CONTACT</p>
           <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
         </NavLink>
+        <a href="https://e-commerce-mern-admin-qtw0.onrender.com/add"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-2 border-gray-300 text-black font-semibold py-1 px-4 rounded-lg hover:bg-black hover:text-white transition duration-300">
+          Admin Panel
+        </a>
+
+
+
       </ul>
 
       <div className="flex items-center gap-6">
+
         <img onClick={() => setShowSearch(!showSearch)} src={assets.search_icon} alt="" className="w-5 cursor-pointer" />
 
         <div className="group relative">
+
 
           <img
             onClick={() => token ? null : navigate('/login')}

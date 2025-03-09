@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import Subscriber from '../models/subcriberModel.js'
 import validator from 'validator';
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
@@ -104,4 +105,67 @@ const adminLogin = async (req, res) => {
 }
 
 
-export { LoginUser, registerUser, adminLogin }
+//subscribed user
+const subscribedUser = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Email is required" });
+        }
+
+        // Check if the email already exists
+        const existingSubscriber = await Subscriber.findOne({ email });
+        if (existingSubscriber) {
+            return res.status(400).json({ success: false, message: "This email is already subscribed!" }); // ⬅️ Use status(400)
+        }
+
+        // Save new subscriber
+        const newSubscriber = new Subscriber({ email });
+        await newSubscriber.save();
+
+        res.json({ success: true, message: "You are Subscribed." });
+    } catch (error) {
+        console.log(error);
+
+        // Handle duplicate key error (MongoDB error code: 11000)
+        if (error.code === 11000) {
+            return res.status(400).json({ success: false, message: "This email is already subscribed!" }); // ⬅️ Use status(400)
+        }
+
+        res.status(500).json({ success: false, message: "Something went wrong!" }); // ⬅️ Use status(500) for unexpected errors
+    }
+};
+
+
+//functions for list subscriber
+const listSubscriber = async (req, res) => {
+    try {
+
+        const Subscribers = await Subscriber.find({});
+        res.json({ success: true, Subscribers })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+
+
+//functions for list user
+const listUser = async (req, res) => {
+    try {
+
+        const Users = await User.find({});
+        res.json({ success: true, Users })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+
+
+export { LoginUser, registerUser, adminLogin, subscribedUser, listSubscriber, listUser }

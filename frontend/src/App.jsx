@@ -23,31 +23,31 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Add request interceptor
+
     const requestInterceptor = axios.interceptors.request.use(
       function (config) {
-        setLoading(true); // Start loading before request
+        setLoading(true);
         return config;
       },
       function (error) {
-        setLoading(false); // Stop loading on request error
+        setLoading(false);
         return Promise.reject(error);
       }
     );
 
-    // Add response interceptor
+
     const responseInterceptor = axios.interceptors.response.use(
       function (response) {
-        setLoading(false); // Stop loading after response
+        setLoading(false);
         return response;
       },
       function (error) {
-        setLoading(false); // Stop loading even on error
+        setLoading(false);
         return Promise.reject(error);
       }
     );
 
-    // Cleanup: Remove interceptors when component unmounts
+
     return () => {
       axios.interceptors.request.eject(requestInterceptor);
       axios.interceptors.response.eject(responseInterceptor);

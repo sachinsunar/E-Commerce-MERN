@@ -33,7 +33,7 @@ const Navbar = () => {
         <img src={assets.bwlogo} className="w-36" alt="" />
       </Link>
 
-      <ul className="hidden sm:flex gap-5 text-sm text-gray-700 hidden">
+      <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
         <NavLink to="/" className="flex flex-col items-center gap-1">
           <p>HOME</p>
           <hr className="w-2/4 border-none h-[1.5px]  bg-gray-700 hidden" />
@@ -50,7 +50,7 @@ const Navbar = () => {
           <p>CONTACT</p>
           <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
         </NavLink>
-        <a href="https://e-commerce-mern-admin-qtw0.onrender.com/add"
+        <a href="http://localhost:5174/add"
           target="_blank"
           rel="noopener noreferrer"
           className="border-2 border-gray-300 text-black font-semibold py-1 px-4 rounded-lg hover:bg-black hover:text-white transition duration-300">
@@ -151,7 +151,7 @@ const Navbar = () => {
           </NavLink>
           <a
             onClick={() => setVisible(false)}
-            href="https://e-commerce-mern-admin-qtw0.onrender.com/add"
+            href="http://localhost:8080/admin/login"
             target="_blank"
             rel="noopener noreferrer"
             className="py-2 pl-6 border">

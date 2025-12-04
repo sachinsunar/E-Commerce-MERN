@@ -11,6 +11,7 @@ import Subscriber from './pages/Subscriber'
 import Users from './pages/Users'
 import Loader from './components/Loader'
 import axios from 'axios'
+import Edit from './pages/Edit'
 
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -75,6 +76,7 @@ const App = () => {
           <div className='w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-gray-600 text-base'>
             <Routes>
               <Route path='/add' element={<Add token={token} />} />
+              <Route path='/edit/:id' element={<Edit token={token} />} />
               <Route path='/list' element={<List token={token} />} />
               <Route path='/orders' element={<Orders token={token} />} />
               <Route path='/subscriber' element={<Subscriber token={token} />} />

@@ -4,6 +4,7 @@ import order_icon from './order_icon.png'
 import upload_area from './upload_area.png'
 import parcel_icon from './parcel_icon.svg'
 import delete_icon from './delete_icon.png'
+import edit_icon from './edit-icon.png'
 
 const assets = {
     logo,
@@ -11,7 +12,8 @@ const assets = {
     order_icon,
     upload_area,
     parcel_icon,
-    delete_icon
+    delete_icon,
+    edit_icon
 }
 
 export default assets;

@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { backendUrl } from '../App'
 import toast from 'react-hot-toast'
 import assets from '../assets/assets'
+import { useNavigate } from 'react-router-dom'
 
 const List = ({ token }) => {
 
   const [list, setList] = useState([])
   const [deletingId, setDeletingId] = useState(null);
+  const navigate = useNavigate();
 
   const fetchList = async () => {
     try {
@@ -40,7 +42,7 @@ const List = ({ token }) => {
       console.log(error)
       toast.error(error.message)
     } finally {
-      setDeletingId(null); // Reset loading state
+      setDeletingId(null); 
     }
   }
 
@@ -76,7 +78,20 @@ const List = ({ token }) => {
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>Rs.{item.price}</p>
-              <div className='flex justify-center items-center'>
+              <div className='flex justify-center gap-4 items-center'>
+                 {deletingId === item._id ? (
+                  <button className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full">
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-gray-500"></div>
+                  </button>
+                ) : (
+                  <img
+                    onClick={() => navigate(`/edit/${item._id}`)}
+                    className='w-6 h-6 cursor-pointer hover:opacity-80 transition'
+                    src={assets.edit_icon}
+                    alt="Edit"
+                  />
+                )}
+
                 {deletingId === item._id ? (
                   <button className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full">
                     <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-gray-500"></div>
@@ -89,6 +104,7 @@ const List = ({ token }) => {
                     alt="Delete"
                   />
                 )}
+                
               </div>
             </div>
           ))

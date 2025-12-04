@@ -47,6 +47,95 @@ const addProduct = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
+
+    // Parse remove flags
+    const removeFlags = JSON.parse(req.body.removeImages || "{}");
+
+    // Find existing product
+    const existingProduct = await Product.findById(id);
+    if (!existingProduct) {
+      return res.json({ success: false, message: "Product not found" });
+    }
+
+    // Collect new uploaded images
+    const newImageFiles = [
+      req.files?.image1?.[0],
+      req.files?.image2?.[0],
+      req.files?.image3?.[0],
+      req.files?.image4?.[0],
+    ].filter(Boolean);
+
+    let uploadedImages = [];
+
+    if (newImageFiles.length > 0) {
+      uploadedImages = await Promise.all(
+        newImageFiles.map(async (file) => {
+          const result = await cloudinary.uploader.upload(file.path, {
+            resource_type: "image",
+          });
+          return result.secure_url;
+        })
+      );
+    }
+
+    // Process image array
+    let updatedImages = [...existingProduct.image]; // copy existing
+
+    // Step 1: Remove images by flags (set slots to null)
+    for (const [key, remove] of Object.entries(removeFlags)) {
+      if (remove) {
+        const index = Number(key.replace("image", "")) - 1;
+        updatedImages[index] = null;
+      }
+    }
+
+    // Step 2: Replace null slots with uploaded new images in order
+    let newImgIndex = 0;
+
+    for (let i = 0; i < updatedImages.length; i++) {
+      if (updatedImages[i] === null && uploadedImages[newImgIndex]) {
+        updatedImages[i] = uploadedImages[newImgIndex];
+        newImgIndex++;
+      }
+    }
+
+    // Step 3: Extra uploaded images → push at end
+    while (newImgIndex < uploadedImages.length) {
+      updatedImages.push(uploadedImages[newImgIndex]);
+      newImgIndex++;
+    }
+
+    // Step 4: Remove any leftover nulls
+    updatedImages = updatedImages.filter(Boolean);
+
+    // Build final update object
+    const productData = {
+      name,
+      description,
+      category,
+      price: Number(price),
+      subCategory,
+      bestseller: bestseller === "true",
+      sizes: JSON.parse(sizes),
+      image: updatedImages,
+    };
+
+    await Product.findByIdAndUpdate(id, productData, { new: true });
+
+    res.json({ success: true, message: "Product Updated" });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+
+
 
 //functions for list products
 const listProduct = async (req, res) => {
@@ -88,8 +177,7 @@ const removeProduct = async (req, res) => {
 //functions for single products info
 const singleProduct = async (req, res) => {
     try {
-
-        const { productId } = req.body
+        const productId = req.params.id;  
         const product = await Product.findById(productId)
         res.json({ success: true, product })
 
@@ -100,4 +188,4 @@ const singleProduct = async (req, res) => {
     }
 }
 
-export { addProduct, listProduct, removeProduct, singleProduct };
+export { addProduct, updateProduct, listProduct, removeProduct, singleProduct };

@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { placeOrder, allOrders, userOrders, updateStatus } from '../controllers/orderController.js'
+import { placeOrder, initiateKhaltiPayment, verifyKhaltiPayment, allOrders, userOrders, updateStatus } from '../controllers/orderController.js'
 import adminAuth from '../middleware/adminAuth.js';
 import authUser from '../middleware/auth.js';
 
@@ -12,6 +12,8 @@ orderRouter.post("/status", adminAuth, updateStatus)
 
 //payment features
 orderRouter.post("/place", authUser, placeOrder)
+orderRouter.post("/khalti/initiate", authUser, initiateKhaltiPayment)
+orderRouter.post("/khalti/verify", authUser, verifyKhaltiPayment)
 
 //User features
 orderRouter.post('/userorders', authUser, userOrders)

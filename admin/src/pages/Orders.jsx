@@ -84,6 +84,15 @@ const Orders = ({ token }) => {
                 <p className={`font-semibold ${order.payment ? "text-green-600" : "text-red-600"}`}>
                   Payment: {order.payment ? "Done" : "Pending"}
                 </p>
+                {order.paymentMethod === 'Khalti' && (
+                  <div className="mt-2 text-xs bg-purple-50 p-2 rounded">
+                    <p className="font-semibold text-purple-700">Khalti Payment Details:</p>
+                    <p>Status: <span className={`font-semibold ${order.paymentStatus === 'Completed' ? 'text-green-600' : 'text-orange-600'}`}>{order.paymentStatus || 'N/A'}</span></p>
+                    {order.transactionId && <p>Transaction ID: {order.transactionId}</p>}
+                    {order.pidx && <p>PIDX: {order.pidx}</p>}
+                    {order.paymentDetails?.mobile && <p>Paid from: {order.paymentDetails.mobile}</p>}
+                  </div>
+                )}
               </div>
               <select onChange={(event) => statusHandler(event, order._id)} value={order.status} className="border rounded-lg p-2 text-gray-700 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="Order Placed">Order Placed</option>

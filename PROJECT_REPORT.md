@@ -36,10 +36,10 @@ The system follows the **Model-View-Controller (MVC)** architectural pattern, wh
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-| Component      | Technology        | Description                                                                 |
-|----------------|-------------------|-----------------------------------------------------------------------------|
-| **Model**      | Mongoose Schemas  | Defines data structure — `userModel`, `productModel`, `orderModel`, `subscriberModel` |
-| **View**       | React.js (JSX)    | Frontend UI — `Home`, `Collection`, `Product`, `Cart`, `Login`, `PlaceOrder`, `Orders` |
+| Component      | Technology        | Description                                                                                         |
+| -------------- | ----------------- | --------------------------------------------------------------------------------------------------- |
+| **Model**      | Mongoose Schemas  | Defines data structure — `userModel`, `productModel`, `orderModel`, `subscriberModel`               |
+| **View**       | React.js (JSX)    | Frontend UI — `Home`, `Collection`, `Product`, `Cart`, `Login`, `PlaceOrder`, `Orders`              |
 | **Controller** | Express.js Routes | Handles business logic — `userController`, `productController`, `orderController`, `cartController` |
 
 ---
@@ -159,12 +159,12 @@ A database named **e-commerce** is created in MongoDB and it contains four colle
 
 #### Relationships
 
-| Relationship          | Type  | Description                                           |
-|-----------------------|-------|-------------------------------------------------------|
-| User → Order          | 1 : N | One user can place multiple orders                   |
-| User → Cart (embedded)| 1 : 1 | Cart data is embedded inside the User document       |
-| Order → Product (ref) | N : M | Each order contains an array of product items        |
-| User → Subscriber     | 1 : 1 | A user may optionally subscribe to the newsletter    |
+| Relationship           | Type  | Description                                       |
+| ---------------------- | ----- | ------------------------------------------------- |
+| User → Order           | 1 : N | One user can place multiple orders                |
+| User → Cart (embedded) | 1 : 1 | Cart data is embedded inside the User document    |
+| Order → Product (ref)  | N : M | Each order contains an array of product items     |
+| User → Subscriber      | 1 : 1 | A user may optionally subscribe to the newsletter |
 
 ---
 
@@ -197,7 +197,7 @@ The ER Diagram represents the entities in the E-Commerce system and illustrates 
  │      │ │      │ │        │ │        │ │Method    │
  └──────┘ └──┬───┘ └────────┘ └────────┘ └──────────┘
               │
-          ◇ Contains 
+          ◇ Contains
               │
               ▼
         ┌──────────┐
@@ -406,41 +406,41 @@ The Physical DFD shows how the system will be implemented, including hardware, s
 
 ### 3.3.1 User API (`/api/user`)
 
-| Method | Endpoint               | Auth   | Description                       |
-|--------|------------------------|--------|-----------------------------------|
-| POST   | `/api/user/register`   | None   | Register a new user               |
-| POST   | `/api/user/login`      | None   | Login user & get JWT token        |
-| POST   | `/api/user/admin`      | None   | Admin login & get JWT token       |
-| POST   | `/api/user/subscriber` | None   | Subscribe to newsletter           |
-| GET    | `/api/user/subscriber-list` | None | List all subscribers          |
-| GET    | `/api/user/all`        | None   | List all users                    |
+| Method | Endpoint                    | Auth | Description                 |
+| ------ | --------------------------- | ---- | --------------------------- |
+| POST   | `/api/user/register`        | None | Register a new user         |
+| POST   | `/api/user/login`           | None | Login user & get JWT token  |
+| POST   | `/api/user/admin`           | None | Admin login & get JWT token |
+| POST   | `/api/user/subscriber`      | None | Subscribe to newsletter     |
+| GET    | `/api/user/subscriber-list` | None | List all subscribers        |
+| GET    | `/api/user/all`             | None | List all users              |
 
 ### 3.3.2 Product API (`/api/product`)
 
-| Method | Endpoint                  | Auth      | Description                        |
-|--------|---------------------------|-----------|------------------------------------|
-| POST   | `/api/product/add`        | Admin JWT | Add a new product (with images)    |
-| POST   | `/api/product/list`       | None      | List all products                  |
-| DELETE | `/api/product/remove/:id` | Admin JWT | Remove a product by ID             |
-| POST   | `/api/product/single/:id` | Admin JWT | Get single product details         |
-| PUT    | `/api/product/update/:id` | Admin JWT | Update product details & images    |
+| Method | Endpoint                  | Auth      | Description                     |
+| ------ | ------------------------- | --------- | ------------------------------- |
+| POST   | `/api/product/add`        | Admin JWT | Add a new product (with images) |
+| POST   | `/api/product/list`       | None      | List all products               |
+| DELETE | `/api/product/remove/:id` | Admin JWT | Remove a product by ID          |
+| POST   | `/api/product/single/:id` | Admin JWT | Get single product details      |
+| PUT    | `/api/product/update/:id` | Admin JWT | Update product details & images |
 
 ### 3.3.3 Cart API (`/api/cart`)
 
-| Method | Endpoint           | Auth     | Description                    |
-|--------|--------------------|----------|--------------------------------|
-| POST   | `/api/cart/get`    | User JWT | Get user's cart data           |
-| POST   | `/api/cart/add`    | User JWT | Add item to cart               |
-| POST   | `/api/cart/update` | User JWT | Update cart item quantity       |
+| Method | Endpoint           | Auth     | Description               |
+| ------ | ------------------ | -------- | ------------------------- |
+| POST   | `/api/cart/get`    | User JWT | Get user's cart data      |
+| POST   | `/api/cart/add`    | User JWT | Add item to cart          |
+| POST   | `/api/cart/update` | User JWT | Update cart item quantity |
 
 ### 3.3.4 Order API (`/api/order`)
 
-| Method | Endpoint              | Auth      | Description                        |
-|--------|-----------------------|-----------|------------------------------------|
-| POST   | `/api/order/place`    | User JWT  | Place a new order (COD)            |
-| POST   | `/api/order/list`     | Admin JWT | Get all orders (Admin)             |
-| POST   | `/api/order/status`   | Admin JWT | Update order status (Admin)        |
-| POST   | `/api/order/userorders` | User JWT | Get orders for logged-in user    |
+| Method | Endpoint                | Auth      | Description                   |
+| ------ | ----------------------- | --------- | ----------------------------- |
+| POST   | `/api/order/place`      | User JWT  | Place a new order (COD)       |
+| POST   | `/api/order/list`       | Admin JWT | Get all orders (Admin)        |
+| POST   | `/api/order/status`     | Admin JWT | Update order status (Admin)   |
+| POST   | `/api/order/userorders` | User JWT  | Get orders for logged-in user |
 
 ---
 
@@ -589,31 +589,216 @@ E-Commerce-MERN/
 
 ## 3.6 Technology Stack
 
-| Layer            | Technology                                      |
-|------------------|-------------------------------------------------|
-| **Frontend**     | React.js, React Router DOM, Tailwind CSS, Axios |
-| **Admin Panel**  | React.js, React Router DOM, Tailwind CSS, Axios |
-| **Backend**      | Node.js, Express.js                             |
-| **Database**     | MongoDB (Mongoose ODM)                          |
-| **Auth**         | JSON Web Token (JWT), Bcrypt.js                 |
-| **File Upload**  | Multer (server), Cloudinary (CDN storage)       |
-| **Build Tool**   | Vite                                            |
-| **Notifications**| React Hot Toast                                 |
-| **Validation**   | Validator.js                                    |
+| Layer               | Technology                                      |
+| ------------------- | ----------------------------------------------- |
+| **Frontend**        | React.js, React Router DOM, Tailwind CSS, Axios |
+| **Admin Panel**     | React.js, React Router DOM, Tailwind CSS, Axios |
+| **Backend**         | Node.js, Express.js                             |
+| **Database**        | MongoDB (Mongoose ODM)                          |
+| **Auth**            | JSON Web Token (JWT), Bcrypt.js                 |
+| **File Upload**     | Multer (server), Cloudinary (CDN storage)       |
+| **Build Tool**      | Vite                                            |
+| **Notifications**   | React Hot Toast                                 |
+| **Validation**      | Validator.js                                    |
+| **Payment Gateway** | Khalti (Digital Wallet & Payment Gateway)       |
+| **HTTP Client**     | Axios (Backend & Frontend)                      |
 
 ---
 
-## 3.7 Security Features
+## 3.7 Payment Gateway Integration
 
-| Feature                   | Implementation                                        |
-|---------------------------|-------------------------------------------------------|
-| Password Hashing          | Bcrypt.js with salt rounds (10)                       |
-| User Authentication       | JWT token-based auth via `auth.js` middleware          |
-| Admin Authentication      | Separate JWT verification via `adminAuth.js` middleware|
-| Input Validation          | Email & password validation using `validator` package  |
-| Protected Routes          | Middleware guards on admin & user-specific endpoints   |
-| CORS                      | Configured via `cors` middleware in Express            |
+### 3.7.1 Khalti Payment Gateway
+
+The application integrates **Khalti**, Nepal's leading digital wallet and payment gateway, for secure online payments.
+
+#### Payment Flow Architecture
+
+```
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   Customer  │         │   Backend   │         │   Khalti    │         │   Database  │
+│  (Frontend) │         │   (API)     │         │   (API)     │         │  (MongoDB)  │
+└──────┬──────┘         └──────┬──────┘         └──────┬──────┘         └──────┬──────┘
+       │                       │                       │                       │
+       │ 1. Select Khalti      │                       │                       │
+       │    & Place Order      │                       │                       │
+       ├──────────────────────▶│                       │                       │
+       │                       │                       │                       │
+       │                       │ 2. Create Order       │                       │
+       │                       │   (Pending Status)    │                       │
+       │                       ├──────────────────────────────────────────────▶│
+       │                       │                       │                       │
+       │                       │ 3. Initiate Payment   │                       │
+       │                       ├──────────────────────▶│                       │
+       │                       │                       │                       │
+       │                       │ 4. Return payment_url │                       │
+       │                       │    & pidx             │                       │
+       │                       │◀──────────────────────┤                       │
+       │                       │                       │                       │
+       │ 5. Redirect to        │                       │                       │
+       │    payment_url        │                       │                       │
+       │◀──────────────────────┤                       │                       │
+       │                       │                       │                       │
+       │ 6. Complete Payment   │                       │                       │
+       ├───────────────────────────────────────────────▶│                       │
+       │                       │                       │                       │
+       │ 7. Redirect to        │                       │                       │
+       │    verify page        │                       │                       │
+       │◀───────────────────────────────────────────────┤                       │
+       │                       │                       │                       │
+       │ 8. Verify Payment     │                       │                       │
+       ├──────────────────────▶│                       │                       │
+       │                       │                       │                       │
+       │                       │ 9. Lookup Payment     │                       │
+       │                       ├──────────────────────▶│                       │
+       │                       │                       │                       │
+       │                       │ 10. Return payment    │                       │
+       │                       │     details           │                       │
+       │                       │◀──────────────────────┤                       │
+       │                       │                       │                       │
+       │                       │ 11. Update Order      │                       │
+       │                       │     Status & Details  │                       │
+       │                       ├──────────────────────────────────────────────▶│
+       │                       │                       │                       │
+       │ 12. Payment Success   │                       │                       │
+       │◀──────────────────────┤                       │                       │
+       │                       │                       │                       │
+```
+
+#### Payment Integration Components
+
+| Component         | File Location                            | Purpose                                   |
+| ----------------- | ---------------------------------------- | ----------------------------------------- |
+| **Configuration** | `backend/config/khalti.js`               | Khalti API credentials and endpoints      |
+| **Controller**    | `backend/controllers/orderController.js` | Payment initiation and verification logic |
+| **Routes**        | `backend/routes/orderRoute.js`           | Payment API endpoints                     |
+| **Model**         | `backend/models/orderModel.js`           | Extended with Khalti fields               |
+| **Frontend UI**   | `frontend/src/pages/PlaceOrder.jsx`      | Payment method selection                  |
+| **Verification**  | `frontend/src/pages/PaymentVerify.jsx`   | Payment callback handling                 |
+
+#### Database Schema Extensions
+
+**Order Model - Khalti Fields:**
+
+```javascript
+{
+  pidx: String,              // Khalti payment identifier
+  transactionId: String,     // Khalti transaction ID
+  khaltiSignature: String,   // Payment signature (JSON stringified)
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Completed', 'Failed', 'User canceled', 'N/A'],
+    default: 'N/A'
+  },
+  paymentDetails: {
+    pidx: String,
+    transaction_id: String,
+    amount: Number,
+    mobile: String,
+    fee: Number,
+    refunded: Boolean
+  }
+}
+```
+
+#### API Endpoints
+
+| Endpoint                     | Method | Purpose                   | Auth Required |
+| ---------------------------- | ------ | ------------------------- | ------------- |
+| `/api/order/khalti/initiate` | POST   | Initiate Khalti payment   | Yes (User)    |
+| `/api/order/khalti/verify`   | POST   | Verify payment completion | Yes (User)    |
+
+#### Payment Initiation Request
+
+```javascript
+POST /api/order/khalti/initiate
+Headers: { token: "user_jwt_token" }
+Body: {
+  userId: "user_id",
+  items: [...],
+  amount: 1500,
+  address: {...},
+  customerInfo: {
+    name: "Customer Name",
+    email: "email@example.com",
+    phone: "98XXXXXXXX"
+  }
+}
+```
+
+#### Payment Initiation Response
+
+```javascript
+{
+  success: true,
+  message: "Payment initiated",
+  orderId: "order_id",
+  payment_url: "https://khalti.com/payment/...",
+  pidx: "unique_payment_identifier",
+  expires_at: "2024-01-01T10:30:00",
+  expires_in: 1800
+}
+```
+
+#### Payment Verification Request
+
+```javascript
+POST /api/order/khalti/verify
+Headers: { token: "user_jwt_token" }
+Body: {
+  pidx: "payment_identifier",
+  purchase_order_id: "order_id",
+  transaction_id: "khalti_txn_id",
+  amount: "150000",
+  status: "Completed"
+}
+```
+
+#### Admin Panel Integration
+
+The admin Orders page displays comprehensive Khalti payment information:
+
+- ✅ Payment Status (Completed/Pending/Failed)
+- ✅ Transaction ID
+- ✅ PIDX (Payment Identifier)
+- ✅ Khalti mobile number used for payment
+- ✅ Visual indicators for payment status
+
+#### Environment Configuration
+
+```env
+KHALTI_SECRET_KEY=live_secret_key_xxxxx
+KHALTI_PUBLIC_KEY=live_public_key_xxxxx
+KHALTI_ENV=production
+KHALTI_RETURN_URL=https://yourdomain.com/payment/verify
+KHALTI_WEBSITE_URL=https://yourdomain.com
+```
+
+#### Security Implementation
+
+| Security Feature             | Implementation                                             |
+| ---------------------------- | ---------------------------------------------------------- |
+| **Secret Key Protection**    | Stored in environment variables, never exposed to frontend |
+| **Server-side Verification** | Payment verification happens on backend only               |
+| **Transaction Signatures**   | Full payment response stored in database for audit         |
+| **Status Validation**        | Payment status validated against Khalti API                |
+| **HTTPS Required**           | All production requests require HTTPS                      |
+
+---
+
+## 3.8 Security Features
+
+| Feature              | Implementation                                          |
+| -------------------- | ------------------------------------------------------- |
+| Password Hashing     | Bcrypt.js with salt rounds (10)                         |
+| User Authentication  | JWT token-based auth via `auth.js` middleware           |
+| Admin Authentication | Separate JWT verification via `adminAuth.js` middleware |
+| Input Validation     | Email & password validation using `validator` package   |
+| Protected Routes     | Middleware guards on admin & user-specific endpoints    |
+| CORS                 | Configured via `cors` middleware in Express             |
+| Payment Security     | Server-side payment verification, encrypted credentials |
 
 ---
 
 > **Note:** This document serves as the system design chapter for the E-Commerce MERN Stack project report. All diagrams are based on the actual codebase implementation.
+
+> **Latest Update:** Khalti Payment Gateway integration completed on February 17, 2026. For detailed integration documentation, see [KHALTI_INTEGRATION.md](./KHALTI_INTEGRATION.md)

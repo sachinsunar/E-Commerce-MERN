@@ -30,6 +30,28 @@ const orderSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false,
+    },
+    // Khalti payment fields
+    pidx: {
+        type: String,
+        default: null,
+    },
+    transactionId: {
+        type: String,
+        default: null,
+    },
+    khaltiSignature: {
+        type: String,
+        default: null,
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['Pending', 'Completed', 'Failed', 'User canceled', 'N/A'],
+        default: 'N/A',
+    },
+    paymentDetails: {
+        type: Object,
+        default: null,
     }
 }, { timestamps: true })
 

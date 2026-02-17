@@ -49,14 +49,19 @@ const PlaceOrder = () => {
          let orderData = {
             address: { ...formData },
             items: orderItems,
-            amount: getCartAmount() + delivery_fee
+            amount: getCartAmount() + delivery_fee,
+            customerInfo: {
+               name: `${formData.firstName} ${formData.lastName}`,
+               email: formData.email,
+               phone: formData.phone
+            }
          }
 
 
          switch (method) {
 
             //API calls for COD
-            case 'cod':
+            case 'cod': {
                const res = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } })
                if (res.data.success) {
                   setCartItem({})
@@ -65,6 +70,19 @@ const PlaceOrder = () => {
                   toast.error(res.data.message)
                }
                break;
+            }
+
+            //API calls for Khalti
+            case 'khalti': {
+               const khaltiRes = await axios.post(backendUrl + '/api/order/khalti/initiate', orderData, { headers: { token } })
+               if (khaltiRes.data.success) {
+                  // Redirect user to Khalti payment page
+                  window.location.href = khaltiRes.data.payment_url;
+               } else {
+                  toast.error(khaltiRes.data.message)
+               }
+               break;
+            }
 
             default:
                break;
@@ -122,13 +140,17 @@ const PlaceOrder = () => {
 
                {/* ----------------payment method-------------- */}
                <div className="flex gap-4 flex-col lg:flex-row ">
+                  <div onClick={() => setMethod('khalti')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
+                     <p className={`in w-3.5 h-3.5 border rounded-full  ${method === 'khalti' ? 'bg-green-400' : ''}`}></p>
+                     <img className="h-5  mx-4" src={assets.Khalti_logo} alt="Khalti" />
+                  </div>
                   <div onClick={() => setMethod('esewa')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`in w-3.5 h-3.5 border rounded-full  ${method === 'esewa' ? 'bg-green-400' : ''}`}></p>
-                     <img className="h-5  mx-4" src={assets.esewa_logo} />
+                     <img className="h-5  mx-4" src={assets.esewa_logo} alt="eSewa" />
                   </div>
                   <div onClick={() => setMethod('imepay')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`min w-3.5 h-3.5 border rounded-full ${method === 'imepay' ? 'bg-green-400' : ''}`}></p>
-                     <img className="h-5  mx-2" src={assets.imepay} />
+                     <img className="h-5  mx-2" src={assets.imepay} alt="IME Pay" />
                   </div>
 
                   <div onClick={() => setMethod('cod')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">

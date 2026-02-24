@@ -23,6 +23,14 @@ const addProduct = async (req, res) => {
             })
         )
 
+        if (isNaN(price)) {
+            return res.json({ success: false, message: "Price must be a number" });
+        }
+
+        if(price <= 0) {
+            return res.json({ success: false, message: "Price must be greater than 0" });
+        }
+
         const productData = {
             name,
             description,

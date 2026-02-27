@@ -13,18 +13,14 @@ import PaymentVerify from "./pages/PaymentVerify";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBox from "./components/SearchBox";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import Loader from "./components/Loader";
 import axios from "axios";
 
-
 const App = () => {
-
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
     const requestInterceptor = axios.interceptors.request.use(
       function (config) {
         setLoading(true);
@@ -33,9 +29,8 @@ const App = () => {
       function (error) {
         setLoading(false);
         return Promise.reject(error);
-      }
+      },
     );
-
 
     const responseInterceptor = axios.interceptors.response.use(
       function (response) {
@@ -45,9 +40,8 @@ const App = () => {
       function (error) {
         setLoading(false);
         return Promise.reject(error);
-      }
+      },
     );
-
 
     return () => {
       axios.interceptors.request.eject(requestInterceptor);

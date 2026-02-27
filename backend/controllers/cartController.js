@@ -34,6 +34,8 @@ const addToCart = async (req, res) => {
         res.json({ sucess: false, message: error.message })
 
     }
+    finally {
+        res.json({ success: false, message: "User not found" })}
 
 }
 

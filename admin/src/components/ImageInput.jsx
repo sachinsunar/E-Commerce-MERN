@@ -8,7 +8,8 @@ const ImageInput = ({
   existingImages, 
   setExistingImages, 
   removeImages, 
-  setRemoveImages 
+  setRemoveImages,
+  onImageChange 
 }) => {
   const preview = image
     ? window.URL.createObjectURL(image)
@@ -30,6 +31,7 @@ const ImageInput = ({
           setRemoveImages(prev => ({ ...prev, [imgKey]: false }));
           setExistingImages(prev => ({ ...prev, [imgKey]: null }));
           setImage(e.target.files[0]);
+          onImageChange && onImageChange();
         }}
       />
 

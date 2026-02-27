@@ -142,16 +142,16 @@ const PlaceOrder = () => {
                <div className="flex gap-4 flex-col lg:flex-row ">
                   <div onClick={() => setMethod('khalti')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`in w-3.5 h-3.5 border rounded-full  ${method === 'khalti' ? 'bg-green-400' : ''}`}></p>
-                     <img className="h-5  mx-4" src={assets.Khalti_logo} alt="Khalti" />
+                     <img className="h-20 w-20" src={assets.Khalti_logo} alt="Khalti" />
                   </div>
-                  <div onClick={() => setMethod('esewa')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
+                  {/* <div onClick={() => setMethod('esewa')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`in w-3.5 h-3.5 border rounded-full  ${method === 'esewa' ? 'bg-green-400' : ''}`}></p>
                      <img className="h-5  mx-4" src={assets.esewa_logo} alt="eSewa" />
                   </div>
                   <div onClick={() => setMethod('imepay')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`min w-3.5 h-3.5 border rounded-full ${method === 'imepay' ? 'bg-green-400' : ''}`}></p>
                      <img className="h-5  mx-2" src={assets.imepay} alt="IME Pay" />
-                  </div>
+                  </div> */}
 
                   <div onClick={() => setMethod('cod')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
                      <p className={`min w-3.5 h-3.5 border rounded-full ${method === 'cod' ? 'bg-green-400' : ''}`}></p>

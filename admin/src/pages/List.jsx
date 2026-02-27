@@ -14,7 +14,7 @@ const List = ({ token }) => {
     try {
       const res = await axios.post(backendUrl + `/api/product/list`);
       if (res.data.success) {
-        setList(res.data.products);
+        setList(res.data.products.reverse());
       } else {
         toast.error(res.data.message);
       }

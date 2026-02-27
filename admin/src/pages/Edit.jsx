@@ -4,7 +4,19 @@ import assets from '../assets/assets'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import toast from 'react-hot-toast'
+import { z } from 'zod'
 import ImageInput from '../components/ImageInput'
+
+const productSchema = z.object({
+  name: z.string().min(1, 'Product name is required').min(3, 'Product name must be at least 3 characters'),
+  description: z.string().min(1, 'Description is required').min(10, 'Description must be at least 10 characters'),
+  price: z.number({ error: 'Price is required' }).positive('Price must be greater than 0'),
+  category: z.enum(['Men', 'Women', 'Unisex', 'Kids'], { error: 'Please select a valid category' }),
+  subCategory: z.enum(['Topwear', 'Bottomwear', 'Winterwear', 'Set'], { error: 'Please select a valid sub category' }),
+  sizes: z.array(z.string()).min(1, 'Please select at least one size'),
+  bestseller: z.boolean(),
+  hasImage: z.boolean().refine(val => val === true, { error: 'Please keep at least one image' }),
+})
 
 const Edit = ({ token }) => {
   const { id } = useParams(); // Get product ID from URL
@@ -32,6 +44,19 @@ const Edit = ({ token }) => {
   const [sizes, setSizes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  // Clear a specific field error instantly when user interacts
+  const clearFieldError = (field) => {
+    if (errors[field]) {
+      setErrors(prev => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
+  };
 
 
   const [removeImages, setRemoveImages] = useState({
@@ -81,6 +106,39 @@ const Edit = ({ token }) => {
 
  const onSubmitHandler = async (e) => {
   e.preventDefault();
+  setErrors({});
+
+  // Check if at least one image remains (existing or new upload, not removed)
+  const hasAnyImage =
+    (image1 || (existingImages.image1 && !removeImages.image1)) ||
+    (image2 || (existingImages.image2 && !removeImages.image2)) ||
+    (image3 || (existingImages.image3 && !removeImages.image3)) ||
+    (image4 || (existingImages.image4 && !removeImages.image4));
+
+  const validationData = {
+    name: name.trim(),
+    description: description.trim(),
+    price: price === '' ? undefined : Number(price),
+    category,
+    subCategory,
+    sizes,
+    bestseller,
+    hasImage: !!hasAnyImage,
+  };
+
+  const result = productSchema.safeParse(validationData);
+  if (!result.success) {
+    const fieldErrors = {};
+    result.error.issues.forEach((err) => {
+      const field = err.path[0];
+      if (!fieldErrors[field]) fieldErrors[field] = err.message;
+    });
+    setErrors(fieldErrors);
+    setSubmitted(true);
+    toast.error('Please fix the validation errors');
+    return;
+  }
+
   setLoading(true);
 
   try {
@@ -138,7 +196,7 @@ const Edit = ({ token }) => {
   }
 
   return (
-    <form onSubmit={onSubmitHandler} className='flex flex-col w-full items-start gap-3'>
+    <form noValidate onSubmit={onSubmitHandler} className='flex flex-col w-full items-start gap-3'>
       <div>
         <p className='mb-2'>Upload Image</p>
       </div>
@@ -153,6 +211,7 @@ const Edit = ({ token }) => {
           setExistingImages={setExistingImages}
           removeImages={removeImages}
           setRemoveImages={setRemoveImages}
+          onImageChange={() => clearFieldError('hasImage')}
         />
 
         <ImageInput
@@ -164,6 +223,7 @@ const Edit = ({ token }) => {
           setExistingImages={setExistingImages}
           removeImages={removeImages}
           setRemoveImages={setRemoveImages}
+          onImageChange={() => clearFieldError('hasImage')}
         />
 
         <ImageInput
@@ -175,6 +235,7 @@ const Edit = ({ token }) => {
           setExistingImages={setExistingImages}
           removeImages={removeImages}
           setRemoveImages={setRemoveImages}
+          onImageChange={() => clearFieldError('hasImage')}
         />
 
         <ImageInput
@@ -186,17 +247,21 @@ const Edit = ({ token }) => {
           setExistingImages={setExistingImages}
           removeImages={removeImages}
           setRemoveImages={setRemoveImages}
+          onImageChange={() => clearFieldError('hasImage')}
         />
       </div>
+      {errors.hasImage && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.hasImage}</p>}
 
 
       <div className='w-full'>
         <p className='mb-2'>Product name</p>
-        <input onChange={(e) => setName(e.target.value)} value={name} className='w-full max-w-[500px] px-2 py-2' type="text" placeholder='Enter product name ' required name="" id="" />
+        <input onChange={(e) => { setName(e.target.value); clearFieldError('name'); }} value={name} style={errors.name ? { borderColor: 'red' } : {}} className='w-full max-w-[500px] px-2 py-2' type="text" placeholder='Enter product name ' name="" id="" />
+        {errors.name && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.name}</p>}
       </div>
       <div className='w-full'>
         <p className='mb-2'>Product desciption</p>
-        <textarea onChange={(e) => setDescription(e.target.value)} value={description} className='w-full max-w-[500px] px-2 py-2' type="text" placeholder='Write content here' required name="" id="" />
+        <textarea onChange={(e) => { setDescription(e.target.value); clearFieldError('description'); }} value={description} style={errors.description ? { borderColor: 'red' } : {}} className='w-full max-w-[500px] px-2 py-2' type="text" placeholder='Write content here' name="" id="" />
+        {errors.description && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.description}</p>}
       </div>
 
       <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8 '>
@@ -221,33 +286,35 @@ const Edit = ({ token }) => {
 
         <div>
           <p className='mb-2'>Product price</p>
-          <input onChange={(e) => setPrice(e.target.value)} value={price} className='w-full px-3 py-2 sm:w-[120px]' type="Number" placeholder='Enter Price ' required name="" id="" />
+          <input onChange={(e) => { setPrice(e.target.value); clearFieldError('price'); }} value={price} style={errors.price ? { borderColor: 'red' } : {}} className='w-full px-3 py-2 sm:w-[120px]' type="Number" placeholder='Enter Price ' name="" id="" />
+          {errors.price && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.price}</p>}
         </div>
       </div>
 
       <div>
         <p>Product Sizes</p>
         <div className='flex gap-3'>
-          <div onClick={() => setSizes(prev => prev.includes("S") ? prev.filter(item => item !== 'S') : [...prev, 'S'])}>
+          <div onClick={() => { setSizes(prev => prev.includes("S") ? prev.filter(item => item !== 'S') : [...prev, 'S']); clearFieldError('sizes'); }}>
             <p className={` ${sizes.includes('S') ? 'bg-pink-100' : 'bg-slate-200'} px-3 cursor-pointer`}>S</p>
           </div>
 
-          <div onClick={() => setSizes(prev => prev.includes("M") ? prev.filter(item => item !== 'M') : [...prev, 'M'])}>
+          <div onClick={() => { setSizes(prev => prev.includes("M") ? prev.filter(item => item !== 'M') : [...prev, 'M']); clearFieldError('sizes'); }}>
             <p className={` ${sizes.includes('M') ? 'bg-pink-100' : 'bg-slate-200'} px-3 cursor-pointer`}>M</p>
           </div>
 
-          <div onClick={() => setSizes(prev => prev.includes("L") ? prev.filter(item => item !== 'L') : [...prev, 'L'])}>
+          <div onClick={() => { setSizes(prev => prev.includes("L") ? prev.filter(item => item !== 'L') : [...prev, 'L']); clearFieldError('sizes'); }}>
             <p className={` ${sizes.includes('L') ? 'bg-pink-100' : 'bg-slate-200'} px-3 cursor-pointer`}>L</p>
           </div>
 
-          <div onClick={() => setSizes(prev => prev.includes("XL") ? prev.filter(item => item !== 'XL') : [...prev, 'XL'])}>
+          <div onClick={() => { setSizes(prev => prev.includes("XL") ? prev.filter(item => item !== 'XL') : [...prev, 'XL']); clearFieldError('sizes'); }}>
             <p className={` ${sizes.includes('XL') ? 'bg-pink-100' : 'bg-slate-200'} px-3 cursor-pointer`}>XL</p>
           </div>
 
-          <div onClick={() => setSizes(prev => prev.includes("XXL") ? prev.filter(item => item !== 'XXL') : [...prev, 'XXL'])}>
+          <div onClick={() => { setSizes(prev => prev.includes("XXL") ? prev.filter(item => item !== 'XXL') : [...prev, 'XXL']); clearFieldError('sizes'); }}>
             <p className={` ${sizes.includes('XXL') ? 'bg-pink-100' : 'bg-slate-200'} px-3 cursor-pointer`}>XXL</p>
           </div>
         </div>
+        {errors.sizes && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.sizes}</p>}
       </div>
 
       <div className='flex gap-2 mt-2'>

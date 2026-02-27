@@ -17,7 +17,7 @@ const Product = () => {
     const foundProduct = products.find((item) => item._id === productId);
     if (foundProduct) {
       setProductData(foundProduct);
-      setImage(foundProduct.image[0]); // Assuming `image` is an array
+      setImage(foundProduct.image[0]);
     }
   };
 

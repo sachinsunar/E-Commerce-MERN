@@ -33,7 +33,7 @@ const LoginUser = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(err);
+        console.log(error);
         res.json({ success: false, message: error.message })
     }
 

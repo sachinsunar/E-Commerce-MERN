@@ -13,9 +13,8 @@ const adminAuth = (req, res, next) => {
         }
         next()
     } catch (error) {
-        console.log(err);
-        res.json({ sucess: false, message: error.message })
-        next()
+        console.log(error);
+        res.json({ success: false, message: error.message })
     }
 }
 

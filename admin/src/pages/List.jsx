@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const List = ({ token }) => {
   const [list, setList] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null); // product to confirm delete
   const navigate = useNavigate();
 
   const fetchList = async () => {
@@ -96,7 +97,7 @@ const List = ({ token }) => {
                 </button>
               ) : (
                 <img
-                  onClick={() => removeProduct(item._id)}
+                  onClick={() => setConfirmDelete(item)}
                   className="w-6 h-6 cursor-pointer hover:opacity-80 transition"
                   src={assets.delete_icon}
                   alt="Delete"
@@ -106,6 +107,39 @@ const List = ({ token }) => {
           </div>
         ))}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Delete Product</h3>
+            <p className="text-gray-600 text-sm mb-1">
+              Are you sure you want to delete
+            </p>
+            <p className="text-gray-800 font-medium text-sm mb-4 truncate">
+              "{confirmDelete.name}"?
+            </p>
+            <p className="text-red-500 text-xs mb-5">This action cannot be undone.</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  removeProduct(confirmDelete._id);
+                  setConfirmDelete(null);
+                }}
+                className="px-4 py-2 text-sm rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -1,0 +1,58 @@
+Project EcommerceMERN {
+  database_type: 'MongoDB'
+  Note: '''
+    E-Commerce MERN Application Database Schema
+    with Khalti Payment Integration
+  '''
+}
+
+Table users as U {
+  _id ObjectId [pk]
+  name String [not null]
+  email String [not null, unique]
+  password String [not null, note: 'Hashed password using bcrypt']
+  cartData Object [not null, default: '{}', note: 'Structure: {productId: quantity}']
+  createdAt DateTime [not null]
+  updatedAt DateTime [not null]
+}
+
+Table products as P {
+  _id ObjectId [pk]
+  name String [not null]
+  description String [not null, note: 'Long text description']
+  price Number [not null]
+  image Array [not null, note: 'URLs from Cloudinary']
+  category String [not null, note: 'Men, Women, Kids']
+  subCategory String [not null, note: 'Topwear, Bottomwear, etc']
+  sizes Array [not null, note: 'Available sizes']
+  bestseller Boolean [not null, default: false]
+  createdAt DateTime [not null]
+  updatedAt DateTime [not null]
+}
+
+Table orders as O {
+  _id ObjectId [pk]
+  userId String [not null, note: 'Foreign key to users', ref: '> users._id']
+  items Array [not null, note: 'Denormalized product data at order time']
+  amount Number [not null, note: 'Total order amount']
+  address Object [not null, note: '{street, city, state, country, zipcode}']
+  status String [not null, default: '"Order Placed"', note: 'Order Placed, Packing, Shipped, Delivered, Cancelled']
+  paymentMethod String [not null, note: 'Stripe, Khalti, or COD']
+  payment Boolean [not null, default: false, note: 'Payment completion flag']
+  pidx String [default: 'null', note: 'Khalti payment ID']
+  transactionId String [default: 'null', note: 'Khalti transaction ID']
+  khaltiSignature String [default: 'null', note: 'Khalti verification']
+  paymentStatus String [default: '"N/A"', note: 'Pending, Completed, Failed, User canceled, N/A']
+  paymentDetails Object [default: 'null', note: 'Gateway metadata']
+  createdAt DateTime [not null]
+  updatedAt DateTime [not null]
+}
+
+Table subscribers as S {
+  _id ObjectId [pk]
+  email String [not null, unique, note: 'Newsletter email']
+  createdAt DateTime [not null]
+  updatedAt DateTime [not null]
+}
+
+Ref: O.userId > U._id [note: "A user can have multiple orders"]
